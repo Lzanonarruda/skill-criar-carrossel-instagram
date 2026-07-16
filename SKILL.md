@@ -202,6 +202,8 @@ Problemas encontrados devem ser corrigidos silenciosamente — o usuário recebe
 
 Para cada slide `i` (1 a N), na ordem, com o PNG já renderizado em resolução final:
 
+**Antes de invocar `/validar-arte-visual`, se o slide usar algum elemento posicionado de forma absoluta/flutuante perto de outro bloco (badge, pill, selo, "Arrasta para ver", ou texto de CTA/corpo próximo a um logo posicionado em `position:absolute` no rodapé, especialmente no slide final):** medir as caixas delimitadoras dos elementos envolvidos (via `getBoundingClientRect` no browser, comparando `top`/`bottom`/`left`/`right` de cada um) e confirmar que não há sobreposição não intencional antes de considerar o slide pronto pra autoavaliação. Não confiar só na leitura visual do preview — uma sobreposição de poucos pixels no preview vira uma faixa visível na exportação final em escala maior.
+
 Primeiro rodar a "Verificação automática de contraste (medição por pixel)" de `_sistema/referencias/templates-post-instagram.md` sobre o slide — corrigir qualquer bloco de texto reprovado antes de seguir. Só depois invocar `/validar-arte-visual` passando:
 - O caminho de `{cliente}/_tmp/slide_XX_check.png` do slide `i`
 - O contexto de marca (paleta e princípios do brand-profile)
@@ -215,7 +217,7 @@ Por slide:
 
 **Teto de segurança: 7 tentativas por slide.** Se depois de 7 rodadas de correção naquele slide o veredito ainda não for "Aprovada" ou "Aprovada com observações", parar o loop **daquele slide**, seguir para os demais, e apresentar o carrossel inteiro ao usuário ao final — com o relatório da última autoavaliação do(s) slide(s) que não convergiram e uma nota explícita do que não foi possível resolver sozinho. Nunca insistir indefinidamente sem informar o usuário.
 
-Usar o "Guia de correção rápida" de `criar-post-instagram` (Passo 2.6) como referência de ajuste técnico — os mesmos problemas (respiro concentrado, sombra pesada, CTA/logo desproporcionais, corte de rosto, elemento decorativo fraco, dado suspeito, elemento perto da borda) se aplicam ao HTML de slide de carrossel do mesmo jeito.
+Usar o "Guia de correção rápida" de `criar-post-instagram` (Passo 2.6) como referência de ajuste técnico — os mesmos problemas (respiro concentrado, sombra pesada, CTA/logo desproporcionais, texto de CTA sobrepondo logo no rodapé do slide final, corte de rosto, elemento decorativo fraco, dado suspeito, elemento perto da borda) se aplicam ao HTML de slide de carrossel do mesmo jeito.
 
 ### Validação narrativa do conjunto (além dos slides individuais)
 
