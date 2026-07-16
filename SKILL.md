@@ -64,7 +64,7 @@ mais adequado ao tema e confirmar antes de gerar.
 
 ## Passo 1.1 — Criar checklist de execução (obrigatório)
 
-Antes de gerar as opções de capa, criar uma lista TodoWrite com os gates obrigatórios desta skill: Passo 1.8 (Humanizar todos os slides), Passo 1.9 (Verificação visual) — 1 item por slide (ex: "Validar slide 1/{N}" ... "Validar slide {N}/{N}") mais "Validação narrativa do conjunto" e "Checklist específico de carrossel", Passo 1.10 (Criar legenda). Ver [[auditoria-execucao-skills]] — marcar `completed` só quando a etapa de fato rodar, nunca antecipado.
+Antes de gerar as opções de capa, gerar um identificador curto pra esta execução (ex: horário atual) e invocar `/auditoria-execucao` em modo bootstrap, passando `criar-carrossel-instagram:<id-execucao>` e os gates: Passo 1.8 (Humanizar todos os slides), Passo 1.9 (Verificação visual — 1 item por slide, ex: "Validar slide 1/{N}"..."Validar slide {N}/{N}", mais "Validação narrativa do conjunto" e "Checklist específico de carrossel"), Passo 1.10 (Criar legenda). Guardar esse `<id-execucao>` pra usar também no fechamento.
 
 **Por padrão, para cada slide, antes de perguntar ao usuário se há foto própria ou decidir por um slide 100% tipográfico (ícone + texto), tentar o banco de imagens primeiro** — mesma lógica de `criar-post-instagram`: chamar `buscar_imagem(cliente: "{cliente}", consulta: "<tema do slide>")` via MCP `banco-imagens` (ver [[mcp-banco-imagens]]).
 
@@ -210,6 +210,8 @@ Para cada slide `i` (1 a N), na ordem, com o PNG já renderizado em resolução 
 
 **Antes de invocar `/validar-arte-visual`, se o slide usar algum elemento posicionado de forma absoluta/flutuante perto de outro bloco (badge, pill, selo, "Arrasta para ver", ou texto de CTA/corpo próximo a um logo posicionado em `position:absolute` no rodapé, especialmente no slide final):** medir as caixas delimitadoras dos elementos envolvidos (via `getBoundingClientRect` no browser, comparando `top`/`bottom`/`left`/`right` de cada um) e confirmar que não há sobreposição não intencional antes de considerar o slide pronto pra autoavaliação. Não confiar só na leitura visual do preview — uma sobreposição de poucos pixels no preview vira uma faixa visível na exportação final em escala maior.
 
+**Essa medição não é condicional a "parecer arriscado":** sempre que o corpo/título do slide tiver comprimento variável e estiver no mesmo bloco visual que um CTA, medir é obrigatório — ver "Quando medir sobreposição deixa de ser opcional" em `templates-post-instagram.md`. Checar também linha viúva na última linha de qualquer texto multi-linha do slide, e se o CTA do slide final está no mesmo flex container do ícone/título/corpo (não num `position:absolute` separado) — ver "Quando o CTA é parte do bloco de conteúdo" no mesmo arquivo.
+
 Primeiro rodar a "Verificação automática de contraste (medição por pixel)" de `_sistema/referencias/templates-post-instagram.md` sobre o slide — corrigir qualquer bloco de texto reprovado antes de seguir. Só depois invocar `/validar-arte-visual` passando:
 - O caminho de `{cliente}/_tmp/slide_XX_check.png` do slide `i`
 - O contexto de marca (paleta e princípios do brand-profile)
@@ -223,7 +225,7 @@ Por slide:
 
 **Teto de segurança: 7 tentativas por slide.** Se depois de 7 rodadas de correção naquele slide o veredito ainda não for "Aprovada" ou "Aprovada com observações", parar o loop **daquele slide**, seguir para os demais, e apresentar o carrossel inteiro ao usuário ao final — com o relatório da última autoavaliação do(s) slide(s) que não convergiram e uma nota explícita do que não foi possível resolver sozinho. Nunca insistir indefinidamente sem informar o usuário.
 
-Usar o "Guia de correção rápida" de `criar-post-instagram` (Passo 2.6) como referência de ajuste técnico — os mesmos problemas (respiro concentrado, sombra pesada, CTA/logo desproporcionais, texto de CTA sobrepondo logo no rodapé do slide final, corte de rosto, elemento decorativo fraco, dado suspeito, elemento perto da borda) se aplicam ao HTML de slide de carrossel do mesmo jeito.
+Usar o "Guia de correção rápida" de `criar-post-instagram` (Passo 2.6) como referência de ajuste técnico — os mesmos problemas (respiro concentrado, sombra pesada, CTA/logo desproporcionais, texto de CTA sobrepondo logo no rodapé do slide final, linha viúva, CTA fora do bloco de conteúdo, corte de rosto, elemento decorativo fraco, dado suspeito, elemento perto da borda) se aplicam ao HTML de slide de carrossel do mesmo jeito.
 
 ### Validação narrativa do conjunto (além dos slides individuais)
 
@@ -349,7 +351,7 @@ Overlay para foto de fundo em slide claro: `rgba({brand_bg_rgb},0.35)` (mesma op
 
 ## Fluxo de revisão
 
-**Auditoria antes de apresentar (obrigatório):** reconferir a lista TodoWrite do Passo 1.1 — todos os itens devem estar `completed`, inclusive um item de validação por slide, antes de mostrar qualquer preview ao usuário. Se algum slide não tiver sido validado, validar antes de prosseguir (ver [[auditoria-execucao-skills]]).
+**Auditoria antes de apresentar (obrigatório):** invocar `/auditoria-execucao` em modo fechamento, passando `criar-carrossel-instagram:<id-execucao>` (o mesmo gerado no bootstrap). Se retornar `AUDITORIA_INCOMPLETA` (inclusive por falta de validação de algum slide), validar o slide faltante e repetir a auditoria antes de mostrar qualquer preview.
 
 Seguir o "Fluxo de revisão — loop obrigatório" de `_sistema/referencias/templates-post-instagram.md` (incluindo a regra de preview sempre em resolução final via `device_scale_factor`). Apresentar a legenda do Passo 1.10 junto com o preview dos slides.
 
