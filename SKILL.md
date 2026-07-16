@@ -60,6 +60,12 @@ Perguntar ao usuário antes de gerar:
 Se o usuário disser "faz um carrossel sobre X" sem mais detalhes, inferir o tipo
 mais adequado ao tema e confirmar antes de gerar.
 
+---
+
+## Passo 1.1 — Criar checklist de execução (obrigatório)
+
+Antes de gerar as opções de capa, criar uma lista TodoWrite com os gates obrigatórios desta skill: Passo 1.8 (Humanizar todos os slides), Passo 1.9 (Verificação visual) — 1 item por slide (ex: "Validar slide 1/{N}" ... "Validar slide {N}/{N}") mais "Validação narrativa do conjunto" e "Checklist específico de carrossel", Passo 1.10 (Criar legenda). Ver [[auditoria-execucao-skills]] — marcar `completed` só quando a etapa de fato rodar, nunca antecipado.
+
 **Por padrão, para cada slide, antes de perguntar ao usuário se há foto própria ou decidir por um slide 100% tipográfico (ícone + texto), tentar o banco de imagens primeiro** — mesma lógica de `criar-post-instagram`: chamar `buscar_imagem(cliente: "{cliente}", consulta: "<tema do slide>")` via MCP `banco-imagens` (ver [[mcp-banco-imagens]]).
 
 **Score alto não é sinônimo de coerência temática — checar os dois antes de sugerir.** `score` ≥ 0.65 mede similaridade textual da consulta, não garante que a cena bate com a emoção/situação específica do slide. Ex: buscar por "pânico, travar na prova" pode retornar cenas de condução tranquila e confiante (score 0.65–0.67), tecnicamente próximas mas tematicamente erradas para um slide sobre nervosismo/medo. Avaliar a imagem em si contra o tema real do slide antes de sugerir; se não bater, não sugerir só porque o score passou do threshold.
@@ -342,6 +348,8 @@ Overlay para foto de fundo em slide claro: `rgba({brand_bg_rgb},0.35)` (mesma op
 ---
 
 ## Fluxo de revisão
+
+**Auditoria antes de apresentar (obrigatório):** reconferir a lista TodoWrite do Passo 1.1 — todos os itens devem estar `completed`, inclusive um item de validação por slide, antes de mostrar qualquer preview ao usuário. Se algum slide não tiver sido validado, validar antes de prosseguir (ver [[auditoria-execucao-skills]]).
 
 Seguir o "Fluxo de revisão — loop obrigatório" de `_sistema/referencias/templates-post-instagram.md` (incluindo a regra de preview sempre em resolução final via `device_scale_factor`). Apresentar a legenda do Passo 1.10 junto com o preview dos slides.
 
