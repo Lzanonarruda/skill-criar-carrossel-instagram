@@ -332,6 +332,19 @@ Ver `{cliente}/brand-profile.md` para valores exatos dos tokens de cor de cada f
 | 2–N | Conexão | {brand_bg_alt} | Conexão emocional com o benefício central do produto/serviço (ver "Contexto do cliente" no brand-profile) | Fundo fantasma |
 | Final | CTA | Gradiente de marca | Mensagem de fechamento + contato | Fundo fantasma branco |
 
+### Conquista em lote — Aprovados (N+2 slides, N = número de pessoas)
+
+| # | Tipo | Fundo | Conteúdo | Ícone |
+|---|---|---|---|---|
+| 1 | Capa | {brand_bg} | Selo/banner de destaque (bloco próprio no fluxo, nunca sobrepondo a foto) + foto real do produto/contexto sem fundo + hook + "Arrasta para o lado" | Ícone fantasma de fundo opcional |
+| 2–N+1 | Uma pessoa por slide | Alternando {brand_bg} / {brand_bg_alt} | Foto da pessoa em card com moldura (ver componente "Foto com moldura + faixa de tag" em templates-post-instagram.md) + legenda grande abaixo do card, variando o texto por slide | — |
+| Final | CTA | Gradiente de marca | Frase de fechamento ecoando a capa (cuidado com linha viúva — testar wrap real, forçar `<br>` manual se preciso) + CTA | Badge branco translúcido |
+
+**Regras específicas deste tipo:**
+- Selo/banner da capa nunca sobrepõe a foto principal — é um bloco próprio no fluxo (`display:inline-flex`, não `position:absolute`), com respiro antes e depois. Erro real de produção: um selo rotacionado em `position:absolute` sobre o canto da foto ficou visualmente colado nela; resolvido tirando o selo do overlay e colocando como elemento independente, centralizado, acima da foto.
+- Logo de cada slide de pessoa vai dentro do canto da própria foto (badge circular branco pequeno, ~40px), nunca no rodapé do slide. Ver "Erros visuais comuns a evitar" em templates-post-instagram.md.
+- Foto de produto/contexto da capa (ex: veículo) sem fundo: se a imagem-fonte vier com fundo preto sólido (JPEG) em vez de transparência real, pedir ao usuário a versão já recortada antes de tentar recorte automático por cor — thresholding simples de preto risca furar partes escuras do próprio objeto (pneu, banco) ou deixar franja de artefato de compressão JPEG na borda.
+
 ---
 
 ## Passo 3 — Imagens, arquitetura e componentes
